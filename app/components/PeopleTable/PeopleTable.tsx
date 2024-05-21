@@ -9,12 +9,13 @@ import {
 } from 'react-native';
 import {PeopleTableProps} from './PeopleTableProps';
 import {grid, pcth} from '../../utils';
+import {FavIcon} from '../../components';
+
+const columnSize = grid([0.8, 2.5, 1.4, 1, 1.8, 1]);
 
 interface RowProps extends ViewProps {
   cells: (string | ReactElement | undefined)[];
 }
-
-const columnSize = grid([0.5, 2.5, 1.4, 1, 1.8, 1]);
 
 const Row = ({cells, ...props}: RowProps) => {
   return (
@@ -47,7 +48,7 @@ const PeopleTable = (props: PeopleTableProps) => {
           contentContainerStyle={styles.horizontalScrollContent}>
           <Row
             cells={[
-              'H',
+              <FavIcon checked />,
               'Name',
               'Birth Year',
               'Gender',
@@ -60,7 +61,12 @@ const PeopleTable = (props: PeopleTableProps) => {
             <TouchableOpacity onPress={onRowPress()} key={index}>
               <Row
                 cells={[
-                  'H',
+                  <FavIcon
+                    //   checked
+                    iconProps={{
+                      color: 'red',
+                    }}
+                  />,
                   person.name,
                   person.birthYear,
                   person.gender,
