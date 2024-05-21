@@ -1,5 +1,13 @@
 import React, {ReactElement} from 'react';
-import {ScrollView, StyleSheet, Text, View, ViewProps} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  Touchable,
+  TouchableOpacity,
+  View,
+  ViewProps,
+} from 'react-native';
 import {PeopleTableProps} from './PeopleTableProps';
 import {grid, pcth} from '../../utils';
 
@@ -14,6 +22,7 @@ const Row = ({cells, ...props}: RowProps) => {
     <View {...props} style={styles.row}>
       {cells.map((cell, index) => (
         <View
+          key={index}
           style={{
             width: pcth(columnSize(index)),
           }}>
@@ -25,6 +34,10 @@ const Row = ({cells, ...props}: RowProps) => {
 };
 
 const PeopleTable = (props: PeopleTableProps) => {
+  const onRowPress = () => () => {
+    props.onRowPress();
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.verticalScrollContent}>
@@ -45,7 +58,7 @@ const PeopleTable = (props: PeopleTableProps) => {
           />
           <View style={styles.divider} />
           {props.people.map((person, index) => (
-            <>
+            <TouchableOpacity onPress={onRowPress()} key={index}>
               <Row
                 cells={[
                   'H',
@@ -59,7 +72,7 @@ const PeopleTable = (props: PeopleTableProps) => {
               {props.people.length - 1 !== index && (
                 <View style={styles.divider} />
               )}
-            </>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </ScrollView>

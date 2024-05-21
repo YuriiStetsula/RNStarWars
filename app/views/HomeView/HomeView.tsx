@@ -1,6 +1,11 @@
 import React from 'react';
 import {View} from 'react-native';
-import {ItemCount, PeopleTable, SpaceBetween} from '../../components';
+import {
+  ButtonOutline,
+  ItemCount,
+  PeopleTable,
+  SpaceBetween,
+} from '../../components';
 
 const fakeResponse = {
   count: 87,
@@ -249,9 +254,14 @@ const fakeResponse = {
   ],
 };
 
-const HomeView = () => {
+const HomeView = ({navigation}) => {
   return (
     <View style={{borderWidth: 0, flex: 1}}>
+      <ButtonOutline
+        style={{alignSelf: 'flex-end'}}
+        type="reject"
+        title="CLEAR FANS"
+      />
       <View style={{flexDirection: 'row', paddingVertical: 10}}>
         <ItemCount count={0} title="Female Fans" />
         <SpaceBetween space={0.2} />
@@ -261,6 +271,9 @@ const HomeView = () => {
       </View>
       <View style={{flex: 1, backgroundColor: '#fff'}}>
         <PeopleTable
+          onRowPress={() => {
+            navigation.navigate('Details');
+          }}
           people={fakeResponse.results.map(result => ({
             name: result.name,
             birthYear: result.birth_year,

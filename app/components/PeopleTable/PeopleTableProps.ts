@@ -1,4 +1,5 @@
 export interface PeopleTableProps {
+  onPress: () => void;
   people: {
     name: string;
     birthYear: string;
