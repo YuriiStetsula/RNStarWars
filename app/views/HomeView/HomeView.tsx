@@ -6,6 +6,10 @@ import {
   PeopleTable,
   SpaceBetween,
 } from '../../components';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AppStackParamsList} from '../../navigator/appStackParamsList';
+
+export type HeomeViewNavigationProp = NavigationProp<AppStackParamsList>;
 
 const fakeResponse = {
   count: 87,
@@ -254,7 +258,9 @@ const fakeResponse = {
   ],
 };
 
-const HomeView = ({navigation}) => {
+const HomeView = () => {
+  const navigation = useNavigation<HeomeViewNavigationProp>();
+
   return (
     <View style={{borderWidth: 0, flex: 1}}>
       <ButtonOutline
