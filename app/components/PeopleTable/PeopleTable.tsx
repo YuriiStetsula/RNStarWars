@@ -3,7 +3,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  Touchable,
   TouchableOpacity,
   View,
   ViewProps,
@@ -40,7 +39,7 @@ const PeopleTable = (props: PeopleTableProps) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.verticalScrollContent}>
+      <ScrollView nestedScrollEnabled>
         <ScrollView
           horizontal
           pagingEnabled
@@ -86,9 +85,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'lightgray',
     paddingHorizontal: 10,
-  },
-  verticalScrollContent: {
-    flex: 1,
   },
   horizontalScrollContent: {
     flexDirection: 'column',
