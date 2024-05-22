@@ -72,7 +72,7 @@ const HomeView = () => {
     if (request.people.isFetching) {
       return;
     }
-    console.log('MAKE REQUEST');
+
     dispatch(getPeopleAction({page: page + ''}));
   }, [page]);
 
