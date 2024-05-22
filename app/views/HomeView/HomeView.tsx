@@ -64,7 +64,7 @@ const HomeView = () => {
     );
   };
 
-  const clearFuns = () => {
+  const clearFans = () => {
     dispatch(clearFavorites());
   };
 
@@ -79,7 +79,7 @@ const HomeView = () => {
   return (
     <View style={styles.container}>
       <ButtonOutline
-        onPress={clearFuns}
+        onPress={clearFans}
         style={styles.button}
         type="reject"
         title="CLEAR FANS"
