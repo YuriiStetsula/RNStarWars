@@ -127,20 +127,14 @@ export const getPeopleAction = createAsyncThunk<
 /* ******************************************************************** */
 
 const reducer = createReducer(initialState, builder => {
-  builder.addCase(getPeopleAction.pending, state => ({
+  builder.addCase(getPeopleAction.fulfilled, (state, action) => ({
     ...state,
-  })),
-    builder.addCase(getPeopleAction.rejected, state => ({
-      ...state,
-    })),
-    builder.addCase(getPeopleAction.fulfilled, (state, action) => ({
-      ...state,
-      ...action.payload,
-      results: {
-        ...state?.results,
-        ...action.payload?.results,
-      },
-    }));
+    ...action.payload,
+    results: {
+      ...state?.results,
+      ...action.payload?.results,
+    },
+  }));
 });
 
 export default reducer;
