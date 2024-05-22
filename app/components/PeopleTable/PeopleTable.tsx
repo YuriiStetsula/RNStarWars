@@ -11,7 +11,7 @@ import {PeopleTableProps} from './PeopleTableProps';
 import {grid, pcth} from '../../utils';
 import {FavIcon} from '../../components';
 
-const columnSize = grid([0.8, 2.5, 1.4, 1, 1.8, 1]);
+const columnSize = grid([0.8, 2.7, 1.4, 1.2, 1.8, 1.1]);
 
 interface RowProps extends ViewProps {
   cells: (string | ReactElement | undefined)[];
