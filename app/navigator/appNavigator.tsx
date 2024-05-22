@@ -14,7 +14,11 @@ const AppNavigator = () => {
           name="Home"
           component={HomeView}
         />
-        <Stack.Screen name="Details" component={DetailsView} />
+        <Stack.Screen
+          name="Details"
+          component={DetailsView}
+          options={{headerBackTitleVisible: false, headerTransparent: true}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

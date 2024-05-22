@@ -11,6 +11,7 @@ const api = async (url: string) => {
     } catch (error) {
       console.warn(error);
     }
+
     return Promise.reject({
       url,
       body: errorText,

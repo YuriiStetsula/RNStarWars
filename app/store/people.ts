@@ -1,4 +1,4 @@
-import {createAsyncThunk, createReducer, current} from '@reduxjs/toolkit';
+import {createAsyncThunk, createReducer} from '@reduxjs/toolkit';
 import {People, Person} from './types';
 import {fetchPeople} from '../api';
 import {PeopleResponse} from '../api/responses';

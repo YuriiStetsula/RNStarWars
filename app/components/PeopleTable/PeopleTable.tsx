@@ -34,8 +34,8 @@ const Row = ({cells, ...props}: RowProps) => {
 };
 
 const PeopleTable = (props: PeopleTableProps) => {
-  const onRowPress = () => () => {
-    props.onRowPress();
+  const onRowPress = (id: string) => () => {
+    props.onRowPress(id);
   };
 
   return (
@@ -58,7 +58,7 @@ const PeopleTable = (props: PeopleTableProps) => {
           />
           <View style={styles.divider} />
           {props.people?.map((person, index) => (
-            <TouchableOpacity onPress={onRowPress()} key={index}>
+            <TouchableOpacity onPress={onRowPress(person.name)} key={index}>
               <Row
                 cells={[
                   <FavIcon

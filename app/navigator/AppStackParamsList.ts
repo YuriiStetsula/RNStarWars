@@ -1,3 +1,6 @@
 export type AppStackParamsList = {
-  Details: undefined;
+  Details: {
+    id: string;
+    page: number;
+  };
 };

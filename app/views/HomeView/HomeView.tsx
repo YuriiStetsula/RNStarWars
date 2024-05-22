@@ -49,8 +49,8 @@ const HomeView = () => {
     setPage(page + 1);
   };
 
-  const navigateToDetails = () => {
-    navigation.navigate('Details');
+  const navigateToDetails = (id: string) => {
+    navigation.navigate('Details', {id, page});
   };
 
   const toggleFavoritePerson = (params: {name: string; gender: string}) => {

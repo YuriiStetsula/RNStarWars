@@ -1,5 +1,5 @@
 export interface PeopleTableProps {
-  onRowPress: () => void;
+  onRowPress: (id: string) => void;
   onFavoritePress: ({name, gender}: {name: string; gender: string}) => void;
   people:
     | {
