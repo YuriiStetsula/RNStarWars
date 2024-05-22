@@ -7,19 +7,22 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-
+import {Provider} from 'react-redux';
 import {AppNavigator} from '../../navigator';
+import {store} from '../../store';
 
 const Root = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <AppNavigator />
-      </View>
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+          <AppNavigator />
+        </View>
+      </SafeAreaView>
+    </Provider>
   );
 };
 
