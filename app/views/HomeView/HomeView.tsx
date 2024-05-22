@@ -31,6 +31,7 @@ const HomeView = () => {
   const favorites = useAppSelector(state => state.favorites);
 
   const [page, setPage] = useState(1);
+  const dispatch = useAppDispatch();
 
   const onPrevPress = () => {
     if (page === 1) {
@@ -66,8 +67,6 @@ const HomeView = () => {
   const clearFuns = () => {
     dispatch(clearFavorites());
   };
-
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (request.people.isFetching) {
