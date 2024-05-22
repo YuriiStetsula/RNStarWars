@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: 'lightgray',
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
   },
   horizontalScrollContent: {
     flexDirection: 'column',
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 22,
   },
   divider: {
     borderBottomColor: 'lightgray',
