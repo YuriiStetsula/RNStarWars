@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
   ButtonOutline,
   ItemCount,
+  Pagination,
   PeopleTable,
   SpaceBetween,
 } from '../../components';
@@ -15,22 +16,41 @@ export type HeomeViewNavigationProp = NavigationProp<AppStackParamsList>;
 
 const HomeView = () => {
   const navigation = useNavigation<HeomeViewNavigationProp>();
-  const page = '1';
-  // const page = useAppSelector(state => state.people.next);
   const people = useAppSelector(state => state.people);
   const request = useAppSelector(state => state.request);
   const planets = useAppSelector(state => state.planets);
   const species = useAppSelector(state => state.species);
 
+  const [page, setPage] = useState(1);
+
+  const onPrevPress = () => {
+    if (page === 1) {
+      return;
+    }
+
+    setPage(page - 1);
+  };
+
+  const onNextPress = () => {
+    const maxPage = Math.floor(people.count / 10);
+
+    if (page === maxPage) {
+      return;
+    }
+
+    setPage(page + 1);
+  };
+
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (request.people.isFetching) {
       return;
     }
-    dispatch(getPeopleAction({page: page}));
-  }, []);
+    console.log('MAKE REQUEST');
+    dispatch(getPeopleAction({page: page + ''}));
+  }, [page]);
 
-  console.log(people, page);
   return (
     <View style={styles.container}>
       <ButtonOutline style={styles.button} type="reject" title="CLEAR FANS" />
@@ -47,11 +67,17 @@ const HomeView = () => {
             onRowPress={() => {
               navigation.navigate('Details');
             }}
-            people={people.results?.[page].map(person => ({
+            people={people.results?.[page]?.map(person => ({
               ...person,
               homeWorld: planets[person.planet] ?? '',
               species: person.species.map(specie => species[specie]).join(' '),
             }))}
+          />
+          <Pagination
+            current={page + ''}
+            onPrevPress={onPrevPress}
+            onNextPress={onNextPress}
+            style={styles.pagination}
           />
         </View>
       )}
@@ -64,6 +90,7 @@ const styles = StyleSheet.create({
   button: {alignSelf: 'flex-end'},
   countContainer: {flexDirection: 'row', paddingVertical: 10},
   tableContainer: {flex: 1, backgroundColor: '#fff'},
+  pagination: {alignSelf: 'flex-end'},
 });
 
 export default HomeView;
