@@ -11,7 +11,7 @@ import {PeopleTableProps} from './PeopleTableProps';
 import {grid, pcth} from '../../utils';
 import {FavIcon} from '../../components';
 
-const columnSize = grid([0.8, 2.7, 2, 1.5, 2.2, 2]);
+const columnSize = grid([1, 2.7, 2, 1.5, 2.2, 2]);
 
 interface RowProps extends ViewProps {
   cells: (string | ReactElement | undefined)[];
@@ -62,7 +62,13 @@ const PeopleTable = (props: PeopleTableProps) => {
               <Row
                 cells={[
                   <FavIcon
-                    //   checked
+                    checked={person.checked}
+                    onPress={() =>
+                      props.onFavoritePress({
+                        name: person.name,
+                        gender: person.gender,
+                      })
+                    }
                     iconProps={{
                       color: 'red',
                     }}

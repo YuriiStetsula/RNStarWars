@@ -9,10 +9,17 @@ import {
 } from '../../components';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AppStackParamsList} from '../../navigator/appStackParamsList';
-import {getPeopleAction} from '../../store';
+import {getPeopleAction, toggleFavorite, clearFavorites} from '../../store';
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import {FavoriteType} from '../../store/types';
 
 export type HeomeViewNavigationProp = NavigationProp<AppStackParamsList>;
+
+const FavoritePersonType = {
+  male: FavoriteType.male,
+  female: FavoriteType.female,
+  'n/a': FavoriteType.other,
+};
 
 const HomeView = () => {
   const navigation = useNavigation<HeomeViewNavigationProp>();
@@ -20,6 +27,7 @@ const HomeView = () => {
   const request = useAppSelector(state => state.request);
   const planets = useAppSelector(state => state.planets);
   const species = useAppSelector(state => state.species);
+  const favorites = useAppSelector(state => state.favorites);
 
   const [page, setPage] = useState(1);
 
@@ -41,6 +49,23 @@ const HomeView = () => {
     setPage(page + 1);
   };
 
+  const navigateToDetails = () => {
+    navigation.navigate('Details');
+  };
+
+  const toggleFavoritePerson = (params: {name: string; gender: string}) => {
+    dispatch(
+      toggleFavorite({
+        id: params.name,
+        type: FavoritePersonType[params.gender],
+      }),
+    );
+  };
+
+  const clearFuns = () => {
+    dispatch(clearFavorites());
+  };
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -53,24 +78,29 @@ const HomeView = () => {
 
   return (
     <View style={styles.container}>
-      <ButtonOutline style={styles.button} type="reject" title="CLEAR FANS" />
+      <ButtonOutline
+        onPress={clearFuns}
+        style={styles.button}
+        type="reject"
+        title="CLEAR FANS"
+      />
       <View style={styles.countContainer}>
-        <ItemCount count={0} title="Female Fans" />
+        <ItemCount count={favorites[FavoriteType.female]} title="Female Fans" />
         <SpaceBetween space={0.2} />
-        <ItemCount count={0} title="Male Fans" />
+        <ItemCount count={favorites[FavoriteType.male]} title="Male Fans" />
         <SpaceBetween space={0.2} />
-        <ItemCount count={0} title="Others" />
+        <ItemCount count={favorites[FavoriteType.other]} title="Others" />
       </View>
       {people && (
         <View style={styles.tableContainer}>
           <PeopleTable
-            onRowPress={() => {
-              navigation.navigate('Details');
-            }}
+            onRowPress={navigateToDetails}
+            onFavoritePress={toggleFavoritePerson}
             people={people.results?.[page]?.map(person => ({
               ...person,
               homeWorld: planets[person.planet] ?? '',
               species: person.species.map(specie => species[specie]).join(' '),
+              checked: favorites.ids.includes(person.name),
             }))}
           />
           <Pagination
