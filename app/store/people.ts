@@ -85,8 +85,12 @@ export const getPeopleAction = createAsyncThunk<
   }
 
   if (!people.results?.[params.page]) {
-    const peopleResponse = await fetchPeople(params);
-    people = normalizePeopleResponse(peopleResponse, params.page);
+    try {
+      const peopleResponse = await fetchPeople(params);
+      people = normalizePeopleResponse(peopleResponse, params.page);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const planetsToFetch = uniqueArray(
@@ -107,7 +111,7 @@ export const getPeopleAction = createAsyncThunk<
       .then(result => {
         result.forEach(entry => thunkAPI.dispatch(setPlanet(entry)));
       })
-      .catch(console.warn);
+      .catch(console.error);
   }
 
   if (speciesToFetch?.length) {
@@ -116,7 +120,7 @@ export const getPeopleAction = createAsyncThunk<
       .then(result => {
         result.forEach(entry => thunkAPI.dispatch(setSpecies(entry)));
       })
-      .catch(console.warn);
+      .catch(console.error);
   }
 
   return people;
