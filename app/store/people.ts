@@ -103,7 +103,7 @@ export const getPeopleAction = createAsyncThunk<
 
   if (planetsToFetch?.length) {
     const promises = planetsToFetch.map(planet => fetchPlanets({page: planet}));
-    await Promise.all(promises)
+    Promise.all(promises)
       .then(result => {
         result.forEach(entry => thunkAPI.dispatch(setPlanet(entry)));
       })
@@ -112,7 +112,7 @@ export const getPeopleAction = createAsyncThunk<
 
   if (speciesToFetch?.length) {
     const promises = speciesToFetch.map(specie => fetchSpecies({page: specie}));
-    await Promise.all(promises)
+    Promise.all(promises)
       .then(result => {
         result.forEach(entry => thunkAPI.dispatch(setSpecies(entry)));
       })
