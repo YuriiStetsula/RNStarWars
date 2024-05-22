@@ -15,10 +15,11 @@ import {FavoriteType} from '../../store/types';
 
 export type HeomeViewNavigationProp = NavigationProp<AppStackParamsList>;
 
-const FavoritePersonType = {
+const FavoritePersonTypeByGender = {
   male: FavoriteType.male,
   female: FavoriteType.female,
   'n/a': FavoriteType.other,
+  hermaphrodite: FavoriteType.other,
 };
 
 const HomeView = () => {
@@ -57,7 +58,7 @@ const HomeView = () => {
     dispatch(
       toggleFavorite({
         id: params.name,
-        type: FavoritePersonType[params.gender],
+        type: FavoritePersonTypeByGender[params.gender],
       }),
     );
   };
