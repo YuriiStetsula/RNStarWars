@@ -57,7 +57,7 @@ const PeopleTable = (props: PeopleTableProps) => {
             ]}
           />
           <View style={styles.divider} />
-          {props.people.map((person, index) => (
+          {props.people?.map((person, index) => (
             <TouchableOpacity onPress={onRowPress()} key={index}>
               <Row
                 cells={[
@@ -70,11 +70,11 @@ const PeopleTable = (props: PeopleTableProps) => {
                   person.name,
                   person.birthYear,
                   person.gender,
-                  person.homeWorld,
-                  'Species',
+                  person.homeWorld + '',
+                  person.species,
                 ]}
               />
-              {props.people.length - 1 !== index && (
+              {props.people && props.people.length - 1 !== index && (
                 <View style={styles.divider} />
               )}
             </TouchableOpacity>

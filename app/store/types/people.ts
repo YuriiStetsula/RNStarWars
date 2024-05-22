@@ -7,13 +7,15 @@ export interface Person {
   eyeColor: string;
   birthYear: string;
   gender: string;
-  homeWorld: string;
-  species: string[];
+  planet: number;
+  species: number[];
 }
 
-export interface PeopleInitialState {
+export interface People {
   count: number;
   next: string;
   previous: null | string;
-  results?: Person[];
+  results?: {
+    [key: string]: Person[];
+  };
 }

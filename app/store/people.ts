@@ -1,25 +1,124 @@
-import {PayloadAction, createAsyncThunk, createReducer} from '@reduxjs/toolkit';
-import {PeopleInitialState, Person} from './types';
+import {createAsyncThunk, createReducer, current} from '@reduxjs/toolkit';
+import {People, Person} from './types';
 import {fetchPeople} from '../api';
 import {PeopleResponse} from '../api/responses';
 import URIJS from 'urijs';
+import {AppDispatch, AppRootState} from './configureStore';
 
-const initialState: PeopleInitialState = {
+import {fetchPlanets, fetchSpecies} from '../api/api';
+import {setPlanet} from './planets';
+import {uniqueArray} from '../utils';
+import {setSpecies} from './species';
+
+const initialState: People = {
   count: 0,
   next: '1',
   previous: null,
   results: undefined,
 };
 
+/* ******************************************************************** */
+/*                             NORMALIZERS                              */
+/* ******************************************************************** */
+
+const normalizePeopleResponse = (
+  response: PeopleResponse,
+  currentPage: string,
+): People => {
+  const {results, previous, next, count} = response;
+  const nextPage = new URIJS(next).search(true)?.page;
+  const previousPage = previous && new URIJS(previous).search(true)?.page;
+
+  return {
+    previous: previousPage,
+    next: nextPage,
+    count,
+    results: {
+      [currentPage]: results.map(
+        ({
+          hair_color,
+          skin_color,
+          eye_color,
+          birth_year,
+          ...result
+        }): Person => {
+          return {
+            ...result,
+            hairColor: hair_color,
+            skinColor: skin_color,
+            eyeColor: eye_color,
+            birthYear: birth_year,
+            planet: new URIJS(result.homeworld)
+              .segment()
+              .find(entry => !isNaN(+entry)),
+            species: result.species.map(specieUrl =>
+              new URIJS(specieUrl).segment().find(entry => !isNaN(+entry)),
+            ),
+          };
+        },
+      ),
+    },
+  };
+};
+
+/* ******************************************************************** */
+/*                             ACTIONS                                  */
+/* ******************************************************************** */
+
 const GET_PEOPLE = 'GET_PEOPLE';
 
 export const getPeopleAction = createAsyncThunk<
-  PeopleResponse,
+  People,
   {
     page: string;
+  },
+  {
+    dispatch: AppDispatch;
+    state: AppRootState;
   }
->(GET_PEOPLE, async params => {
-  const people = await fetchPeople(params);
+>(GET_PEOPLE, async (params, thunkAPI) => {
+  const state = thunkAPI.getState();
+  let people = state.people;
+
+  if (+params.page > +state.people.next) {
+    return state.people;
+  }
+
+  if (!people.results?.[params.page]) {
+    const peopleResponse = await fetchPeople(params);
+    people = normalizePeopleResponse(peopleResponse, params.page);
+  }
+
+  const planetsToFetch = uniqueArray(
+    people.results?.[params.page]
+      ?.filter(person => !state.planets[person.planet])
+      ?.map(person => person.planet),
+  );
+
+  const speciesToFetch = uniqueArray(
+    people.results?.[params.page]
+      ?.filter(person => person.species.some(specie => !state.species[specie]))
+      ?.flatMap(person => person.species),
+  );
+
+  if (planetsToFetch?.length) {
+    const promises = planetsToFetch.map(planet => fetchPlanets({page: planet}));
+    await Promise.all(promises)
+      .then(result => {
+        result.forEach(entry => thunkAPI.dispatch(setPlanet(entry)));
+      })
+      .catch(console.warn);
+  }
+
+  if (speciesToFetch?.length) {
+    const promises = speciesToFetch.map(specie => fetchSpecies({page: specie}));
+    await Promise.all(promises)
+      .then(result => {
+        result.forEach(entry => thunkAPI.dispatch(setSpecies(entry)));
+      })
+      .catch(console.warn);
+  }
+
   return people;
 });
 
@@ -27,34 +126,21 @@ export const getPeopleAction = createAsyncThunk<
 /*                             REDUCERS                                 */
 /* ******************************************************************** */
 
-const onPeopleFulfiled = (
-  state: PeopleInitialState,
-  action: PayloadAction<PeopleResponse>,
-): PeopleInitialState => {
-  const {results, previous, next, count} = action.payload;
-  const nextPage = new URIJS(next).search(true)?.page;
-  const previousPage = previous && new URIJS(previous).search(true)?.page;
-
-  return {
-    ...state,
-    previous: previousPage,
-    next: nextPage,
-    count,
-    results: results.map((result): Person => {
-      return {
-        ...result,
-        hairColor: result.hair_color,
-        skinColor: result.skin_color,
-        eyeColor: result.eye_color,
-        birthYear: result.birth_year,
-        homeWorld: result.homeworld,
-      };
-    }),
-  };
-};
-
 const reducer = createReducer(initialState, builder => {
-  builder.addCase(getPeopleAction.fulfilled, onPeopleFulfiled);
+  builder.addCase(getPeopleAction.pending, state => ({
+    ...state,
+  })),
+    builder.addCase(getPeopleAction.rejected, state => ({
+      ...state,
+    })),
+    builder.addCase(getPeopleAction.fulfilled, (state, action) => ({
+      ...state,
+      ...action.payload,
+      results: {
+        ...state?.results,
+        ...action.payload?.results,
+      },
+    }));
 });
 
 export default reducer;

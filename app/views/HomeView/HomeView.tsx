@@ -15,17 +15,22 @@ export type HeomeViewNavigationProp = NavigationProp<AppStackParamsList>;
 
 const HomeView = () => {
   const navigation = useNavigation<HeomeViewNavigationProp>();
-
-  const peopleStore = useAppSelector(state => ({
-    people: state.people.results,
-    page: state.people.next,
-  }));
+  const page = '1';
+  // const page = useAppSelector(state => state.people.next);
+  const people = useAppSelector(state => state.people);
+  const request = useAppSelector(state => state.request);
+  const planets = useAppSelector(state => state.planets);
+  const species = useAppSelector(state => state.species);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getPeopleAction({page: peopleStore.page}));
+    if (request.people.isFetching) {
+      return;
+    }
+    dispatch(getPeopleAction({page: page}));
   }, []);
 
+  console.log(people, page);
   return (
     <View style={styles.container}>
       <ButtonOutline style={styles.button} type="reject" title="CLEAR FANS" />
@@ -36,13 +41,17 @@ const HomeView = () => {
         <SpaceBetween space={0.2} />
         <ItemCount count={0} title="Others" />
       </View>
-      {peopleStore.people && (
+      {people && (
         <View style={styles.tableContainer}>
           <PeopleTable
             onRowPress={() => {
               navigation.navigate('Details');
             }}
-            people={peopleStore.people}
+            people={people.results?.[page].map(person => ({
+              ...person,
+              homeWorld: planets[person.planet] ?? '',
+              species: person.species.map(specie => species[specie]).join(' '),
+            }))}
           />
         </View>
       )}

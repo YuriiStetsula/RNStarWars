@@ -1,13 +1,19 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import people from './people';
+import planets from './planets';
+import species from './species';
+import request from './request';
 
 const rootReducer = combineReducers({
   people,
+  planets,
+  species,
+  request,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type AppRootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;

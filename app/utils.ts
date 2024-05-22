@@ -13,4 +13,11 @@ const grid = (sizes: number[]) => {
   return (index: number) => step * (count > index ? sizes[index] : 1);
 };
 
-export {pcth, grid};
+const uniqueArray = <T>(array: T[] | undefined) => {
+  if (array?.length) {
+    return [...new Set(array)];
+  }
+  return array;
+};
+
+export {pcth, grid, uniqueArray};

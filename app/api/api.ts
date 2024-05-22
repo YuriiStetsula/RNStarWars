@@ -1,5 +1,5 @@
 import config from '../config';
-import {PeopleResponse} from './responses';
+import {PeopleResponse, PlanetsResponse, SpeciesResponse} from './responses';
 
 const api = async (url: string) => {
   const response = await fetch(url);
@@ -20,23 +20,19 @@ const api = async (url: string) => {
 };
 
 export const fetchPeople = async (params: {page: string}) => {
-  console.log('fetching');
   const response = await api(config.url + '/people?page=' + params.page);
-  console.log(response, 'fetching');
-
   const json = (await response.json()) as PeopleResponse;
   return json;
 };
 
-export const fetchSpecies = async () => {
-  const response = await api(config.url + '/species');
-
-  const json = await response.json();
-  console.log(json);
+export const fetchSpecies = async (params: {page: number}) => {
+  const response = await api(config.url + '/species/' + params.page);
+  const json = (await response.json()) as SpeciesResponse;
+  return {index: params.page, name: json.name};
 };
 
-export const fetchPlanets = async () => {
-  const response = await api(config.url + '/planets');
-
-  const json = await response.json();
+export const fetchPlanets = async (params: {page: number}) => {
+  const response = await api(config.url + '/planets/' + params.page);
+  const json = (await response.json()) as PlanetsResponse;
+  return {index: params.page, name: json.name};
 };
