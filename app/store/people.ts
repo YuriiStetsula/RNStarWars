@@ -26,7 +26,7 @@ const normalizePeopleResponse = (
   currentPage: string,
 ): People => {
   const {results, previous, next, count} = response;
-  const nextPage = new URIJS(next).search(true)?.page;
+  const nextPage = next && new URIJS(next).search(true)?.page;
   const previousPage = previous && new URIJS(previous).search(true)?.page;
 
   return {

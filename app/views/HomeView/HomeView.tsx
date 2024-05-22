@@ -42,7 +42,7 @@ const HomeView = () => {
   };
 
   const onNextPress = () => {
-    const maxPage = Math.floor(people.count / 10);
+    const maxPage = Math.ceil(people.count / 10);
 
     if (page === maxPage) {
       return;
