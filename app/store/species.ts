@@ -1,7 +1,7 @@
 import {createAction, createReducer} from '@reduxjs/toolkit';
-import {Planets} from './types';
+import {Species} from './types';
 
-const initialState: Planets = {};
+const initialState: Species = {};
 
 const SET_SPECIES = 'SET_SPECIES';
 
