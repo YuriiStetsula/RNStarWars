@@ -76,11 +76,14 @@ const HomeView = () => {
     dispatch(getPeopleAction({page: page + ''}));
   }, [page]);
 
+  const disabledStyle = request.people.isFetching ? styles.disabled : undefined;
+
   return (
     <View style={styles.container}>
       <ButtonOutline
         onPress={clearFans}
-        style={styles.button}
+        style={[styles.button, disabledStyle]}
+        disabled={request.people.isFetching}
         type="reject"
         title="CLEAR FANS"
       />
@@ -92,7 +95,9 @@ const HomeView = () => {
         <ItemCount count={favorites[FavoriteType.other]} title="Others" />
       </View>
       {people && (
-        <View style={styles.tableContainer}>
+        <View
+          pointerEvents={disabledStyle ? 'none' : 'auto'}
+          style={[styles.tableContainer, disabledStyle]}>
           <PeopleTable
             onRowPress={navigateToDetails}
             onFavoritePress={toggleFavoritePerson}
@@ -121,6 +126,7 @@ const styles = StyleSheet.create({
   countContainer: {flexDirection: 'row', paddingVertical: 10},
   tableContainer: {flex: 1, backgroundColor: '#fff'},
   pagination: {alignSelf: 'flex-end'},
+  disabled: {opacity: 0.5},
 });
 
 export default HomeView;
