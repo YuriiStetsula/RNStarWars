@@ -20,6 +20,7 @@ const FavoritePersonTypeByGender = {
   female: FavoriteType.female,
   'n/a': FavoriteType.other,
   hermaphrodite: FavoriteType.other,
+  none: FavoriteType.other,
 };
 
 const HomeView = () => {
