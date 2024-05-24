@@ -1,5 +1,6 @@
 import React, {ReactElement} from 'react';
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -43,7 +44,7 @@ const PeopleTable = (props: PeopleTableProps) => {
       <ScrollView nestedScrollEnabled>
         <ScrollView
           horizontal
-          pagingEnabled
+          pagingEnabled={Platform.OS === 'ios'}
           showsHorizontalScrollIndicator
           contentContainerStyle={styles.horizontalScrollContent}>
           <Row
