@@ -5,7 +5,7 @@ const initialState: Planets = {};
 
 const SET_PLANET = 'SET_PLANET';
 
-export const setPlanet = createAction<{index: number; name: string}>(
+export const setPlanet = createAction<{index: string; name: string}>(
   SET_PLANET,
 );
 

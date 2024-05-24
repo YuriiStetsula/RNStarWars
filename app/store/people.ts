@@ -95,30 +95,40 @@ export const getPeopleAction = createAsyncThunk<
 
   const planetsToFetch = uniqueArray(
     people.results?.[params.page]
-      ?.filter(person => !state.planets[person.planet])
+      ?.filter(person => person.planet && !state.planets[person.planet])
       ?.map(person => person.planet),
   );
 
   const speciesToFetch = uniqueArray(
     people.results?.[params.page]
-      ?.filter(person => person.species.some(specie => !state.species[specie]))
+      ?.filter(
+        person =>
+          person.species &&
+          person.species.some(
+            specie => state.species && specie && !state.species[specie],
+          ),
+      )
       ?.flatMap(person => person.species),
   );
 
   if (planetsToFetch?.length) {
-    const promises = planetsToFetch.map(planet => fetchPlanets({page: planet}));
+    const promises = planetsToFetch.map(
+      planet => planet && fetchPlanets({page: planet}),
+    );
     Promise.all(promises)
       .then(result => {
-        result.forEach(entry => thunkAPI.dispatch(setPlanet(entry)));
+        result.forEach(entry => entry && thunkAPI.dispatch(setPlanet(entry)));
       })
       .catch(console.error);
   }
 
   if (speciesToFetch?.length) {
-    const promises = speciesToFetch.map(specie => fetchSpecies({page: specie}));
+    const promises = speciesToFetch.map(
+      specie => specie && fetchSpecies({page: specie}),
+    );
     Promise.all(promises)
       .then(result => {
-        result.forEach(entry => thunkAPI.dispatch(setSpecies(entry)));
+        result.forEach(entry => entry && thunkAPI.dispatch(setSpecies(entry)));
       })
       .catch(console.error);
   }

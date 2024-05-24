@@ -26,13 +26,13 @@ export const fetchPeople = async (params: {page: string}) => {
   return json;
 };
 
-export const fetchSpecies = async (params: {page: number}) => {
+export const fetchSpecies = async (params: {page: string}) => {
   const response = await api(config.url + '/species/' + params.page);
   const json = (await response.json()) as SpeciesResponse;
   return {index: params.page, name: json.name};
 };
 
-export const fetchPlanets = async (params: {page: number}) => {
+export const fetchPlanets = async (params: {page: string}) => {
   const response = await api(config.url + '/planets/' + params.page);
   const json = (await response.json()) as PlanetsResponse;
   return {index: params.page, name: json.name};

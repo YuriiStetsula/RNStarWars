@@ -104,8 +104,12 @@ const HomeView = () => {
             onFavoritePress={toggleFavoritePerson}
             people={people.results?.[page]?.map(person => ({
               ...person,
-              homeWorld: planets[person.planet] ?? '',
-              species: person.species.map(specie => species[specie]).join(' '),
+              homeWorld: (person.planet && planets[person.planet]) ?? '',
+              species:
+                person.species &&
+                person.species
+                  .map(specie => specie && species[specie])
+                  .join(' '),
               checked: favorites.ids.includes(person.name),
             }))}
           />

@@ -5,7 +5,7 @@ const initialState: Species = {};
 
 const SET_SPECIES = 'SET_SPECIES';
 
-export const setSpecies = createAction<{index: number; name: string}>(
+export const setSpecies = createAction<{index: string; name: string}>(
   SET_SPECIES,
 );
 

@@ -7,8 +7,8 @@ export interface Person {
   eyeColor: string;
   birthYear: string;
   gender: string;
-  planet: number;
-  species: number[];
+  planet?: string;
+  species?: (string | undefined)[];
 }
 
 export interface People {
